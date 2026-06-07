@@ -1,0 +1,1 @@
+import{s as e,t,u as n}from"./index-2Z33eIbS.js";var r={};function i(t,r){return n(),e(`div`)}var a=t(r,[[`render`,i]]);export{a as default};
