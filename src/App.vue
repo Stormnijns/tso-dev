@@ -22,6 +22,7 @@ const version = __COMMIT_HASH__
       </div>
       <div>
         <a href="https://discord.gg/tso">Community Discord</a>
+        <a href="https://www.roblox.com/communities/3423188/h-S-th-Ord-r">Roblox Group</a>
       </div>
       <div class="footer-right">
         <p>v.{{ version }}</p>
@@ -77,6 +78,9 @@ footer {
 
   display: flex;
   align-items: center;
+}
+footer a {
+  margin: 0 1rem;
 }
 
 footer p {
