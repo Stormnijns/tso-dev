@@ -87,7 +87,7 @@ const saberArena = {
   Losses: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Losses),
   TimePlayed: computed(() => data.value?.[1]?.data?.value?.Data?.TimePlayed),
 }
-
+console.log(saberArena)
 const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
@@ -107,28 +107,31 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
     </p>
 
     <div v-else>
-      <h1>
-        {{ username }} ({{ displayName }})
-        <span id="rank">{{ groupRank }}</span>
-      </h1>
-
+      <h1 v-if="username !== undefined">{{ username }} ({{ displayName }}) <span id="rank">{{ groupRank }}</span></h1>
+      <h1 v-if="username === undefined">User not found!</h1>
       <p>ID: {{ userId }}</p>
 
       <br>
-      <h2>Saber Dueling</h2>
-      <p>Level: {{ saberDueling.Level }}</p>
-      <p>Kills: {{ saberDueling.Kills }}</p>
-      <p>Deaths: {{ saberDueling.Deaths }}</p>
-      <p>Wins: {{ saberDueling.Wins }}</p>
-      <p>Losses: {{ saberDueling.Losses }}</p>
-      <br>
+      <div v-if="username !== undefined">
+        <h2>Saber Dueling (Lv.{{saberDueling.Level}})</h2>
+        <p v-if="saberDueling.Level.value === undefined">User hasn't joined ever, or since tracking started.</p>
+        <div class="stats-grid" v-if="saberDueling.Level.value !== undefined">
+          <p>Kills<br><span>{{ saberDueling.Kills }}</span></p>
+          <p>Deaths<br><span>{{ saberDueling.Deaths }}</span></p>
+          <p>Wins<br><span>{{ saberDueling.Wins }}</span></p>
+          <p>Losses<br><span>{{ saberDueling.Losses }}</span></p>
+        </div>
+        <br>
 
-      <h2>Saber Arena</h2>
-      <p>Kills: {{ saberArena.Kills }}</p>
-      <p>Deaths: {{ saberArena.Deaths }}</p>
-      <p>Wins: {{ saberArena.Wins }}</p>
-      <p>Losses: {{ saberArena.Losses }}</p>
-      <p>Time played: {{ formatTime(saberArena.TimePlayed.value) }}</p>
+        <h2>Saber Arena (Played for {{formatTime(saberArena.TimePlayed.value)}})</h2>
+        <p v-if="saberArena.TimePlayed.value === undefined">User hasn't joined ever, or since tracking started.</p>
+        <div class="stats-grid" v-if="saberArena.TimePlayed.value !== undefined">
+          <p>Kills<br><span>{{ saberArena.Kills }}</span></p>
+          <p>Deaths<br><span>{{ saberArena.Deaths }}</span></p>
+          <p>Wins<br><span>{{ saberArena.Wins }}</span></p>
+          <p>Losses<br><span>{{ saberArena.Losses }}</span></p>
+        </div>
+      </div>
 
       <pre v-if="false">{{ JSON.stringify(data, null, 2) }}</pre>
     </div>
@@ -157,6 +160,27 @@ main {
   gap: 10px;
   margin-bottom: 20px;
   align-items: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+
+  border: #232630 1px solid;
+  border-radius: 12px;
+  padding: 4px;
+  background: #181a21;
+}
+
+.stats-grid p {
+  border-radius: 6px;
+  padding: 2px 4px;
+  background: #333640;
+  color: #acb3bf;
+}
+.stats-grid p span {
+  color: white;
 }
 
 input {
