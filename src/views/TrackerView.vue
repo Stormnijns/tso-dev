@@ -14,6 +14,12 @@ const avatarUrl = ref('')
 const searchId = ref('')
 const userId = ref('36449401')
 
+const ranks = [
+  { level: 5, name: 'Bronze', image: 'bronze.png' },
+  { level: 10, name: 'Silver', image: 'silver.png' },
+  { level: 15, name: 'Gold', image: 'gold.png' },
+]
+
 async function loadPlayerData(id: string) {
   try {
     loading.value = true
@@ -68,7 +74,7 @@ function search() {
 
   router.push({
     path: '/tracker',
-    query: { user: userId.value }
+    query: { user: userId.value },
   })
 
   loadPlayerData(userId.value)
@@ -95,7 +101,37 @@ const saberArena = {
 const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
+const compRank = ref('unranked.png')
 
+const currentRank = computed(() => {
+  const level = saberDueling.Level.value ?? 0
+
+  let rank = {
+    level: 0,
+    name: 'Unranked',
+    image: 'unranked.png',
+  }
+
+  for (const r of ranks) {
+    if (level >= r.level) {
+      rank = r
+    } else {
+      break
+    }
+  }
+
+  return rank
+})
+
+const nextRank = computed(() => {
+  const level = saberDueling.Level.value ?? 0
+
+  return ranks.find((r) => level < r.level) ?? null
+})
+
+const compRankImage = computed(
+  () => new URL(`../assets/ranks/${currentRank.value.image}`, import.meta.url).href,
+)
 </script>
 
 <template>
@@ -113,12 +149,7 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
 
     <div v-else>
       <div v-if="username !== undefined" class="profile-header">
-        <img
-          v-if="avatarUrl"
-          :src="avatarUrl"
-          alt="Avatar"
-          class="avatar"
-        />
+        <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" class="avatar" />
 
         <div>
           <h1>
@@ -131,25 +162,64 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
       </div>
       <h1 v-if="username === undefined">User not found!</h1>
 
-      <br>
+      <br />
       <div v-if="username !== undefined">
-        <h2>Saber Dueling (Lv.{{saberDueling.Level}})</h2>
-        <p v-if="saberDueling.Kills.value === undefined">User hasn't joined ever, or since tracking started.</p>
-        <div class="stats-grid" v-if="saberDueling.Kills.value !== undefined">
-          <p>Kills<br><span>{{ saberDueling.Kills }}</span></p>
-          <p>Deaths<br><span>{{ saberDueling.Deaths }}</span></p>
-          <p>Wins<br><span>{{ saberDueling.Wins }}</span></p>
-          <p>Losses<br><span>{{ saberDueling.Losses }}</span></p>
-        </div>
-        <br>
+        <h2>Saber Dueling (Lv.{{ saberDueling.Level }})</h2>
 
-        <h2>Saber Arena (Played for {{formatTime(saberArena.TimePlayed.value)}})</h2>
-        <p v-if="saberArena.TimePlayed.value === undefined">User hasn't joined ever, or since tracking started.</p>
+        <p v-if="saberDueling.Kills.value === undefined">
+          User hasn't joined ever, or since tracking started.
+        </p>
+        <div class="stats-grid-container">
+          <div class="rank-display">
+            <img class="comp-rank" :src="compRankImage" alt="" />
+
+            <div>
+              <p>{{ currentRank.name.toUpperCase() }}</p>
+
+              <p v-if="nextRank">
+                <span>Next rank at Lv.{{ nextRank.level }}</span>
+              </p>
+
+              <p v-else>
+                <span>Maximum rank reached</span>
+              </p>
+            </div>
+          </div>
+          <div class="stats-grid" v-if="saberDueling.Kills.value !== undefined">
+            <p>
+              Kills<br /><span>{{ saberDueling.Kills }}</span>
+            </p>
+            <p>
+              Deaths<br /><span>{{ saberDueling.Deaths }}</span>
+            </p>
+            <p>
+              Wins<br /><span>{{ saberDueling.Wins }}</span>
+            </p>
+            <p>
+              Losses<br /><span>{{ saberDueling.Losses }}</span>
+            </p>
+          </div>
+        </div>
+
+        <br />
+
+        <h2>Saber Arena (Played for {{ formatTime(saberArena.TimePlayed.value) }})</h2>
+        <p v-if="saberArena.TimePlayed.value === undefined">
+          User hasn't joined ever, or since tracking started.
+        </p>
         <div class="stats-grid" v-if="saberArena.TimePlayed.value !== undefined">
-          <p>Kills<br><span>{{ saberArena.Kills }}</span></p>
-          <p>Deaths<br><span>{{ saberArena.Deaths }}</span></p>
-          <p>Wins<br><span>{{ saberArena.Wins }}</span></p>
-          <p>Losses<br><span>{{ saberArena.Losses }}</span></p>
+          <p>
+            Kills<br /><span>{{ saberArena.Kills }}</span>
+          </p>
+          <p>
+            Deaths<br /><span>{{ saberArena.Deaths }}</span>
+          </p>
+          <p>
+            Wins<br /><span>{{ saberArena.Wins }}</span>
+          </p>
+          <p>
+            Losses<br /><span>{{ saberArena.Losses }}</span>
+          </p>
         </div>
       </div>
 
@@ -165,6 +235,21 @@ main {
   justify-content: flex-start;
   align-items: flex-start;
   padding: 20px;
+}
+
+.rank-display {
+  display: flex;
+}
+.rank-display p {
+  color: #acb3bf;
+}
+.rank-display p span {
+  color: white;
+}
+
+.comp-rank {
+  height: 32px;
+  margin: 10px;
 }
 
 #rank {
@@ -186,10 +271,15 @@ main {
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 
+  padding: 4px;
   border: #232630 1px solid;
   border-radius: 12px;
-  padding: 4px;
   background: #181a21;
+}
+.stats-grid-container {
+  border: #232630 1px solid;
+  border-radius: 12px;
+  background: #232630;
 }
 
 .stats-grid p {
@@ -250,5 +340,4 @@ button:active {
   border-radius: 50%;
   border: 1px solid #232630;
 }
-
 </style>
