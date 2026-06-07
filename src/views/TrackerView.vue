@@ -10,7 +10,7 @@ const error = ref('')
 const data = ref<any>(null)
 const userInfo = ref<any>(null)
 const groupInfo = ref<any>(null)
-
+const avatarUrl = ref('')
 const searchId = ref('')
 const userId = ref('36449401')
 
@@ -19,11 +19,15 @@ async function loadPlayerData(id: string) {
     loading.value = true
     error.value = ''
 
-    const [dataRes, userRes, groupRes] = await Promise.all([
+    const [dataRes, userRes, groupRes, avatarRes] = await Promise.all([
       fetch(`https://tso-dev-backend.onrender.com/api/player/${id}`),
       fetch(`https://tso-dev-backend.onrender.com/api/user/${id}`),
       fetch(`https://tso-dev-backend.onrender.com/api/group/${id}`),
+      fetch(`https://tso-dev-backend.onrender.com/api/avatar/${id}`),
     ])
+
+    const avatar = await avatarRes.json()
+    avatarUrl.value = avatar?.imageUrl ?? ''
 
     data.value = await dataRes.json()
     userInfo.value = await userRes.json()
@@ -87,10 +91,11 @@ const saberArena = {
   Losses: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Losses),
   TimePlayed: computed(() => data.value?.[1]?.data?.value?.Data?.TimePlayed),
 }
-console.log(saberArena)
+
 const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
+
 </script>
 
 <template>
@@ -107,9 +112,24 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
     </p>
 
     <div v-else>
-      <h1 v-if="username !== undefined">{{ username }} ({{ displayName }}) <span id="rank">{{ groupRank }}</span></h1>
+      <div v-if="username !== undefined" class="profile-header">
+        <img
+          v-if="avatarUrl"
+          :src="avatarUrl"
+          alt="Avatar"
+          class="avatar"
+        />
+
+        <div>
+          <h1>
+            {{ username }} ({{ displayName }})
+            <span id="rank">{{ groupRank }}</span>
+          </h1>
+
+          <p>ID: {{ userId }}</p>
+        </div>
+      </div>
       <h1 v-if="username === undefined">User not found!</h1>
-      <p>ID: {{ userId }}</p>
 
       <br>
       <div v-if="username !== undefined">
@@ -218,4 +238,18 @@ button:hover {
 button:active {
   transform: translateY(0px);
 }
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid #232630;
+}
+
 </style>
