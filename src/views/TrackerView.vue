@@ -80,8 +80,8 @@ const saberDueling = {
   Kills: computed(() => data.value?.[2]?.data?.value?.Data?.Kills),
   Deaths: computed(() => data.value?.[2]?.data?.value?.Data?.Deaths),
   Wins: computed(() => data.value?.[2]?.data?.value?.Data?.Wins),
-  Losses: computed(() => data.value?.[2]?.data?.value?.Data?.Losses),
-  Level: computed(() => data.value?.[2]?.data?.value?.Data?.Level),
+  Losses: computed(() => data.value?.[2]?.data?.value?.Data?.Losses ?? 0),
+  Level: computed(() => data.value?.[2]?.data?.value?.Data?.Level ?? 0),
 }
 
 const saberArena = {
@@ -134,8 +134,8 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
       <br>
       <div v-if="username !== undefined">
         <h2>Saber Dueling (Lv.{{saberDueling.Level}})</h2>
-        <p v-if="saberDueling.Level.value === undefined">User hasn't joined ever, or since tracking started.</p>
-        <div class="stats-grid" v-if="saberDueling.Level.value !== undefined">
+        <p v-if="saberDueling.Kills.value === undefined">User hasn't joined ever, or since tracking started.</p>
+        <div class="stats-grid" v-if="saberDueling.Kills.value !== undefined">
           <p>Kills<br><span>{{ saberDueling.Kills }}</span></p>
           <p>Deaths<br><span>{{ saberDueling.Deaths }}</span></p>
           <p>Wins<br><span>{{ saberDueling.Wins }}</span></p>
