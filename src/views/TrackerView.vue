@@ -45,7 +45,18 @@ onMounted(() => {
 
   loadPlayerData(userId.value)
 })
+function formatTime(seconds: number | null | undefined) {
+  if (!seconds || seconds <= 0) return '0m'
 
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+
+  if (hours > 0) {
+    return `${hours}h ${minutes}m`
+  }
+
+  return `${minutes}m`
+}
 function search() {
   if (!searchId.value) return
 
@@ -60,8 +71,23 @@ function search() {
 }
 
 const equippedSaber = computed(() => data.value?.[0]?.data?.value?.Data?.EquippedSaber)
-const saberDuelingKills = computed(() => data.value?.[2]?.data?.value?.Data?.Kills)
-const saberDuelingDeaths = computed(() => data.value?.[2]?.data?.value?.Data?.Deaths)
+
+const saberDueling = {
+  Kills: computed(() => data.value?.[2]?.data?.value?.Data?.Kills),
+  Deaths: computed(() => data.value?.[2]?.data?.value?.Data?.Deaths),
+  Wins: computed(() => data.value?.[2]?.data?.value?.Data?.Wins),
+  Losses: computed(() => data.value?.[2]?.data?.value?.Data?.Losses),
+  Level: computed(() => data.value?.[2]?.data?.value?.Data?.Level),
+}
+
+const saberArena = {
+  Kills: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Kills),
+  Deaths: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Deaths),
+  Wins: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Wins),
+  Losses: computed(() => data.value?.[1]?.data?.value?.Data?.AllTime?.Losses),
+  TimePlayed: computed(() => data.value?.[1]?.data?.value?.Data?.TimePlayed),
+}
+
 const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
@@ -88,9 +114,21 @@ const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
 
       <p>ID: {{ userId }}</p>
 
+      <br>
       <h2>Saber Dueling</h2>
-      <p>Kills: {{ saberDuelingKills }}</p>
-      <p>Deaths: {{ saberDuelingDeaths }}</p>
+      <p>Level: {{ saberDueling.Level }}</p>
+      <p>Kills: {{ saberDueling.Kills }}</p>
+      <p>Deaths: {{ saberDueling.Deaths }}</p>
+      <p>Wins: {{ saberDueling.Wins }}</p>
+      <p>Losses: {{ saberDueling.Losses }}</p>
+      <br>
+
+      <h2>Saber Arena</h2>
+      <p>Kills: {{ saberArena.Kills }}</p>
+      <p>Deaths: {{ saberArena.Deaths }}</p>
+      <p>Wins: {{ saberArena.Wins }}</p>
+      <p>Losses: {{ saberArena.Losses }}</p>
+      <p>Time played: {{ formatTime(saberArena.TimePlayed.value) }}</p>
 
       <pre v-if="false">{{ JSON.stringify(data, null, 2) }}</pre>
     </div>
