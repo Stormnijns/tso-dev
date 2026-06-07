@@ -11,7 +11,6 @@
 
 <style scoped>
 main {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
