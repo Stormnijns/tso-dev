@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 
 const loading = ref(false)
 const error = ref('')
@@ -7,8 +11,8 @@ const data = ref<any>(null)
 const userInfo = ref<any>(null)
 const groupInfo = ref<any>(null)
 
-const searchId = ref('195174845')
-const userId = ref('195174845')
+const searchId = ref('')
+const userId = ref('36449401')
 
 async function loadPlayerData(id: string) {
   try {
@@ -31,10 +35,27 @@ async function loadPlayerData(id: string) {
   }
 }
 
-loadPlayerData(userId.value)
+onMounted(() => {
+  const queryId = route.query.user as string
+
+  if (queryId) {
+    userId.value = queryId
+    searchId.value = queryId
+  }
+
+  loadPlayerData(userId.value)
+})
 
 function search() {
+  if (!searchId.value) return
+
   userId.value = searchId.value
+
+  router.push({
+    path: '/tracker',
+    query: { user: userId.value }
+  })
+
   loadPlayerData(userId.value)
 }
 
