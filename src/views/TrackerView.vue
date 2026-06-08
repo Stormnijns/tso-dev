@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Banner from '@/components/PageBanner.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -135,95 +136,98 @@ const compRankImage = computed(
 </script>
 
 <template>
-  <main>
-    <div class="search">
-      <input v-model="searchId" placeholder="Enter Roblox User ID" @keyup.enter="search" />
-      <button @click="search">Search</button>
-    </div>
-
-    <p v-if="loading">Loading...</p>
-
-    <p v-else-if="error">
-      {{ error }}
-    </p>
-
-    <div v-else>
-      <div v-if="username !== undefined" class="profile-header">
-        <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" class="avatar" />
-
-        <div>
-          <h1>
-            {{ username }} ({{ displayName }})
-            <span id="rank">{{ groupRank }}</span>
-          </h1>
-
-          <p>ID: {{ userId }}</p>
-        </div>
+  <main class="page">
+    <Banner image="background2.png"/>
+    <div class="content">
+      <div class="search">
+        <input v-model="searchId" placeholder="Enter Roblox User ID" @keyup.enter="search" />
+        <button @click="search">Search</button>
       </div>
-      <h1 v-if="username === undefined">User not found!</h1>
 
-      <br />
-      <div v-if="username !== undefined">
-        <h2>Saber Dueling (Lv.{{ saberDueling.Level }})</h2>
+      <p v-if="loading">Loading...</p>
 
-        <p v-if="saberDueling.Kills.value === undefined">
-          User hasn't joined ever, or since tracking started.
-        </p>
-        <div class="stats-grid-container">
-          <div class="rank-display">
-            <img class="comp-rank" :src="compRankImage" alt="" />
+      <p v-else-if="error">
+        {{ error }}
+      </p>
 
-            <div>
-              <p>{{ currentRank.name.toUpperCase() }}</p>
+      <div v-else>
+        <div v-if="username !== undefined" class="profile-header">
+          <img v-if="avatarUrl" :src="avatarUrl" alt="Avatar" class="avatar" />
 
-              <p v-if="nextRank">
-                <span>Next rank at Lv.{{ nextRank.level }}</span>
+          <div>
+            <h1>
+              {{ username }} ({{ displayName }})
+              <span id="rank">{{ groupRank }}</span>
+            </h1>
+
+            <p>ID: {{ userId }}</p>
+          </div>
+        </div>
+        <h1 v-if="username === undefined">User not found!</h1>
+
+        <br />
+        <div v-if="username !== undefined">
+          <h2>Saber Dueling (Lv.{{ saberDueling.Level }})</h2>
+
+          <p v-if="saberDueling.Kills.value === undefined">
+            User hasn't joined ever, or since tracking started.
+          </p>
+          <div class="stats-grid-container">
+            <div class="rank-display">
+              <img class="comp-rank" :src="compRankImage" alt="" />
+
+              <div>
+                <p>{{ currentRank.name.toUpperCase() }}</p>
+
+                <p v-if="nextRank">
+                  <span>Next rank at Lv.{{ nextRank.level }}</span>
+                </p>
+
+                <p v-else>
+                  <span>Maximum rank reached</span>
+                </p>
+              </div>
+            </div>
+            <div class="stats-grid" v-if="saberDueling.Kills.value !== undefined">
+              <p>
+                Kills<br /><span>{{ saberDueling.Kills }}</span>
               </p>
-
-              <p v-else>
-                <span>Maximum rank reached</span>
+              <p>
+                Deaths<br /><span>{{ saberDueling.Deaths }}</span>
+              </p>
+              <p>
+                Wins<br /><span>{{ saberDueling.Wins }}</span>
+              </p>
+              <p>
+                Losses<br /><span>{{ saberDueling.Losses }}</span>
               </p>
             </div>
           </div>
-          <div class="stats-grid" v-if="saberDueling.Kills.value !== undefined">
+
+          <br />
+
+          <h2>Saber Arena (Played for {{ formatTime(saberArena.TimePlayed.value) }})</h2>
+          <p v-if="saberArena.TimePlayed.value === undefined">
+            User hasn't joined ever, or since tracking started.
+          </p>
+          <div class="stats-grid" v-if="saberArena.TimePlayed.value !== undefined">
             <p>
-              Kills<br /><span>{{ saberDueling.Kills }}</span>
+              Kills<br /><span>{{ saberArena.Kills }}</span>
             </p>
             <p>
-              Deaths<br /><span>{{ saberDueling.Deaths }}</span>
+              Deaths<br /><span>{{ saberArena.Deaths }}</span>
             </p>
             <p>
-              Wins<br /><span>{{ saberDueling.Wins }}</span>
+              Wins<br /><span>{{ saberArena.Wins }}</span>
             </p>
             <p>
-              Losses<br /><span>{{ saberDueling.Losses }}</span>
+              Losses<br /><span>{{ saberArena.Losses }}</span>
             </p>
           </div>
         </div>
 
-        <br />
-
-        <h2>Saber Arena (Played for {{ formatTime(saberArena.TimePlayed.value) }})</h2>
-        <p v-if="saberArena.TimePlayed.value === undefined">
-          User hasn't joined ever, or since tracking started.
-        </p>
-        <div class="stats-grid" v-if="saberArena.TimePlayed.value !== undefined">
-          <p>
-            Kills<br /><span>{{ saberArena.Kills }}</span>
-          </p>
-          <p>
-            Deaths<br /><span>{{ saberArena.Deaths }}</span>
-          </p>
-          <p>
-            Wins<br /><span>{{ saberArena.Wins }}</span>
-          </p>
-          <p>
-            Losses<br /><span>{{ saberArena.Losses }}</span>
-          </p>
-        </div>
+        <pre v-if="false">{{ JSON.stringify(data, null, 2) }}</pre>
       </div>
-
-      <pre v-if="false">{{ JSON.stringify(data, null, 2) }}</pre>
     </div>
   </main>
 </template>

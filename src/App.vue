@@ -21,8 +21,8 @@ const version = __COMMIT_HASH__
         <p class="footer-subtitle">Community statistics and player tracking</p>
       </div>
       <div>
-        <a href="https://discord.gg/tso">Community Discord</a>
-        <a href="https://www.roblox.com/communities/3423188/h-S-th-Ord-r">Roblox Group</a>
+        <a href="https://discord.gg/tso" target="_blank">Community Discord</a>
+        <a href="https://www.roblox.com/communities/3423188/h-S-th-Ord-r" target="_blank">Roblox Group</a>
       </div>
       <div class="footer-right">
         <p>v.{{ version }}</p>
@@ -63,12 +63,14 @@ footer > div:nth-child(2) {
 }
 
 nav {
-  width: 100%;
-  font-size: 20px;
-  text-align: left;
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  z-index: 1000;
+  font-size: 25px;
+  background: #181a21;
+  border-bottom: 1px solid #232630;
 }
 
 footer {

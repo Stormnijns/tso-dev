@@ -12,6 +12,10 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
+.content {
+  position: relative;
+  z-index: 1;
+}
 
 @media (hover: hover) {
   a:hover {

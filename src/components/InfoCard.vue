@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 const props = defineProps({
   title: String,
   description: String,
   image: String,
+  route: String,
 })
 
 const imageUrl = (name: string) => new URL(`../assets/images/${name}`, import.meta.url).href
-function handleClick() {}
 </script>
 
 <template>
-  <a class="info-card" @click="handleClick">
+  <RouterLink :to="route" class="info-card">
     <div class="left-side">
       <img class="image-icon" :src="imageUrl(props.image)" alt="" />
       <h1 class="green">{{ title }}</h1>
@@ -22,7 +23,7 @@ function handleClick() {}
         <path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
       </svg>
     </div>
-  </a>
+  </RouterLink>
 </template>
 
 <style scoped>

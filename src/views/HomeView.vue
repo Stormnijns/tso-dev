@@ -1,15 +1,17 @@
 <script setup>
 import InfoCard from '@/components/InfoCard.vue'
+import Banner from '@/components/PageBanner.vue'
 </script>
 
 <template>
-  <main>
-    <h1>Homepage</h1>
-    <h3>Under construction</h3>
+  <main class="page">
+    <Banner image="background1.png"/>
 
-    <div id="info-cards">
-      <info-card title="Recent" description="Balance changes" image="balance_icon.png" />
-      <info-card title="Competitive" description="Ranking system" image="rank_icon.png" />
+    <div class="content">
+      <div id="info-cards">
+        <InfoCard title="Recent" description="Balance changes" image="balance_icon.png" route="/balance"/>
+        <InfoCard title="Competitive" description="Ranking system" image="rank_icon.png" route="/competitive" />
+      </div>
     </div>
   </main>
 </template>
@@ -27,5 +29,10 @@ main {
   display: flex;
   margin-top: 1rem;
   gap: 2rem;
+}
+.page {
+  position: relative;
+  min-height: 50vh;
+  padding: 20px;
 }
 </style>

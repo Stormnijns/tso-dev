@@ -15,6 +15,21 @@ const router = createRouter({
       component: () => import('../views/FormsView.vue'),
     },
     {
+      path: '/leaderboard',
+      name: 'leaderboard',
+      component: () => import('../views/LeaderboardView.vue'),
+    },
+    {
+      path: '/competitive',
+      name: 'competitive',
+      component: () => import('../views/CompetitiveView.vue'),
+    },
+    {
+      path: '/balance',
+      name: 'balance',
+      component: () => import('../views/BalanceView.vue'),
+    },
+    {
       path: '/tracker',
       name: 'tracker',
       component: () => import('../views/TrackerView.vue'),
