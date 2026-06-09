@@ -1,13 +1,51 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import Banner from '@/components/PageBanner.vue'
+import LeaderboardEntry from '@/components/LeaderboardEntry.vue'
+
+const leaderboard = ref<any[]>([])
+const loading = ref(false)
+const error = ref('')
+
+async function getLeaderboard() {
+  loading.value = true
+  error.value = ''
+
+  try {
+    const res = await fetch('https://tso-dev-backend.onrender.com/api/leaderboard')
+
+    const json = await res.json()
+
+    leaderboard.value = json.leaderboard || []
+  } catch (err: any) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+onMounted(() => {
+  getLeaderboard()
+})
 </script>
 
 <template>
   <main class="page">
-    <Banner image="backgroundLb.png"/>
+    <Banner image="backgroundLb.png" />
+
     <div class="content">
       <div id="leaderboard">
-        <h1>Leaderboard</h1>
+        <p v-if="loading">Loading...</p>
+        <p v-else-if="error" style="color: red">{{ error }}</p>
+
+        <LeaderboardEntry
+          v-for="(player, index) in leaderboard"
+          :key="player.userId"
+          :rank="index + 1"
+          :user-id="player.userId"
+          :name="player.username"
+          :value="player.kills"
+          :avatar="player.avatar"
+        />
       </div>
     </div>
   </main>
