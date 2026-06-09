@@ -1,1 +1,0 @@
-var e=`/tso-dev/assets/bronze-HIwAkBJ1.png`,t=`/tso-dev/assets/gold-DnJnj-ro.png`,n=`/tso-dev/assets/silver-D4p3o9UU.png`,r=`/tso-dev/assets/unranked-SNdjQxUw.png`;export{e as i,n,t as r,r as t};

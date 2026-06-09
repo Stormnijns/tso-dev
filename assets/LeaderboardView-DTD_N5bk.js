@@ -1,0 +1,1 @@
+import{c as e,f as t,h as n,n as r,p as i,t as a,u as o}from"./index-BS9OO0ZH.js";var s={class:`page`},c=r(i({__name:`LeaderboardView`,setup(r){return(r,i)=>(n(),o(`main`,s,[t(a,{image:`backgroundLb.png`}),i[0]||=e(`div`,{class:`content`},[e(`div`,{id:`leaderboard`},[e(`h1`,null,`Leaderboard`)])],-1)]))}}),[[`__scopeId`,`data-v-1f773238`]]);export{c as default};

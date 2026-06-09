@@ -1,1 +1,0 @@
-import{c as e,f as t,h as n,n as r,t as i,u as a}from"./index-mYzaoXPZ.js";var o={class:`page`},s=r({__name:`BalanceView`,setup(r){return(r,s)=>(n(),a(`main`,o,[t(i,{image:`background1.png`}),s[0]||=e(`div`,{class:`content`},[e(`h1`,null,`This page is not done yet...`)],-1)]))}},[[`__scopeId`,`data-v-d42019e8`]]);export{s as default};
