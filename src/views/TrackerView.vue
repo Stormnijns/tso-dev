@@ -16,13 +16,13 @@ const searchId = ref('')
 const userId = ref('36449401')
 
 const ranks = [
-  { level: 5, name: 'Bronze', image: 'bronze.png'},
+  { level: 5, name: 'Bronze', image: 'bronze.png' },
   { level: 10, name: 'Silver', image: 'silver.png' },
   { level: 15, name: 'Gold', image: 'gold.png' },
-  { level: 20, name: 'Platinum', image: 'platinum.png' , color: "#6affd1"},
-  { level: 25, name: 'Emerald', image: 'emerald.png', color: "#00ff00"},
-  { level: 30, name: 'Diamond', image: 'diamond.png', color: "#00ddff" },
-  { level: 35, name: 'Master', image: 'master.png', color: "#ff0066" },
+  { level: 20, name: 'Platinum', image: 'platinum.png', color: '#6affd1' },
+  { level: 25, name: 'Emerald', image: 'emerald.png', color: '#00ff00' },
+  { level: 30, name: 'Diamond', image: 'diamond.png', color: '#00ddff' },
+  { level: 35, name: 'Master', image: 'master.png', color: '#ff0066' },
 ]
 
 async function loadPlayerData(id: string) {
@@ -111,6 +111,10 @@ const saberArena = {
   TimePlayed: computed(() => data.value?.[1]?.data?.value?.Data?.TimePlayed),
 }
 
+const yavinIV = {
+  Level: computed(() => undefined),
+}
+
 const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
@@ -158,7 +162,7 @@ const compRankImage = computed(
 
 <template>
   <main class="page">
-    <Banner image="background2.png"/>
+    <Banner image="background2.png" />
     <div class="content">
       <div class="search">
         <input v-model="searchId" placeholder="Enter Roblox User ID" @keyup.enter="search" />
@@ -228,10 +232,10 @@ const compRankImage = computed(
           <br />
 
           <h2>Saber Arena (Played for {{ formatTime(saberArena.TimePlayed.value) }})</h2>
-          <p v-if="saberArena.TimePlayed.value === undefined">
+          <p v-if="saberArena.Wins.value === undefined">
             User hasn't joined ever, or since tracking started.
           </p>
-          <div class="stats-grid" v-if="saberArena.TimePlayed.value !== undefined">
+          <div class="stats-grid" v-if="saberArena.Wins.value !== undefined">
             <p>
               Kills<br /><span>{{ saberArena.Kills }}</span>
             </p>
@@ -244,6 +248,19 @@ const compRankImage = computed(
             <p>
               Losses<br /><span>{{ saberArena.Losses }}</span>
             </p>
+          </div>
+          <br />
+          <h2>Yavin IV</h2>
+          <p v-if="yavinIV.Level.value === undefined">
+            User hasn't joined ever, or since tracking started.
+          </p>
+          <div class="stats-grid" v-if="yavinIV.Level.value !== undefined">
+            <p>Level<br /><span>N/A</span></p>
+            <p>Events<br /><span>N/A</span></p>
+            <p>Jailed<br /><span>N/A</span></p>
+            <p>Playtime<br /><span>N/A</span></p>
+            <p>Kills<br /><span>N/A</span></p>
+            <p>Deaths<br /><span>N/A</span></p>
           </div>
         </div>
 
