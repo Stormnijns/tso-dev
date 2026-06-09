@@ -11,7 +11,7 @@ const version = __COMMIT_HASH__
       <RouterLink to="/tracker">Tracker</RouterLink>
     </nav>
 
-    <main class="page">
+    <main class="main-page">
       <RouterView />
     </main>
 
@@ -56,10 +56,10 @@ footer > div:nth-child(2) {
   display: flex;
   flex-direction: column;
 }
-.page {
+.main-page {
   flex: 1;
-  padding-top: 40px;
   width: 100%;
+  padding-top: 2.5rem;
 }
 
 nav {
@@ -69,6 +69,7 @@ nav {
   width: 100%;
   z-index: 1000;
   font-size: 25px;
+  height: 2.5rem;
   background: #181a21;
   border-bottom: 1px solid #232630;
 }

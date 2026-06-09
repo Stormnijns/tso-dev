@@ -16,9 +16,13 @@ const searchId = ref('')
 const userId = ref('36449401')
 
 const ranks = [
-  { level: 5, name: 'Bronze', image: 'bronze.png' },
+  { level: 5, name: 'Bronze', image: 'bronze.png'},
   { level: 10, name: 'Silver', image: 'silver.png' },
   { level: 15, name: 'Gold', image: 'gold.png' },
+  { level: 20, name: 'Platinum', image: 'platinum.png' , color: "#6affd1"},
+  { level: 25, name: 'Emerald', image: 'emerald.png', color: "#00ff00"},
+  { level: 30, name: 'Diamond', image: 'diamond.png', color: "#00ddff" },
+  { level: 35, name: 'Master', image: 'master.png', color: "#ff0066" },
 ]
 
 async function loadPlayerData(id: string) {
@@ -45,7 +49,17 @@ async function loadPlayerData(id: string) {
     loading.value = false
   }
 }
+watch(
+  () => route.query.user,
+  (newUser) => {
+    if (!newUser) return
 
+    userId.value = newUser as string
+    searchId.value = newUser as string
+
+    loadPlayerData(userId.value)
+  },
+)
 onMounted(() => {
   const queryId = route.query.user as string
 
@@ -77,8 +91,6 @@ function search() {
     path: '/tracker',
     query: { user: userId.value },
   })
-
-  loadPlayerData(userId.value)
 }
 
 const equippedSaber = computed(() => data.value?.[0]?.data?.value?.Data?.EquippedSaber)
@@ -103,6 +115,15 @@ const username = computed(() => userInfo.value?.name)
 const displayName = computed(() => userInfo.value?.displayName)
 const groupRank = computed(() => groupInfo.value?.role?.name ?? 'Not in group')
 const compRank = ref('unranked.png')
+
+const rankGlowStyle = computed(() => {
+  const color = currentRank.value.color
+  if (!color) return {}
+
+  return {
+    filter: `drop-shadow(0 0 3px ${color})`,
+  }
+})
 
 const currentRank = computed(() => {
   const level = saberDueling.Level.value ?? 0
@@ -174,7 +195,7 @@ const compRankImage = computed(
           </p>
           <div class="stats-grid-container">
             <div class="rank-display">
-              <img class="comp-rank" :src="compRankImage" alt="" />
+              <img class="comp-rank" :src="compRankImage" alt="" :style="rankGlowStyle" />
 
               <div>
                 <p>{{ currentRank.name.toUpperCase() }}</p>
@@ -243,6 +264,8 @@ main {
 
 .rank-display {
   display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 .rank-display p {
   color: #acb3bf;
@@ -252,8 +275,8 @@ main {
 }
 
 .comp-rank {
-  height: 32px;
-  margin: 10px;
+  height: 50px;
+  margin: 5px 5px 5px 10px;
 }
 
 #rank {

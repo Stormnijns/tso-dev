@@ -54,7 +54,7 @@ const imageUrl = (name: string) => new URL(`../assets/images/${name}`, import.me
 }
 .image-icon {
   width: auto;
-  height: 120px;
+  height: 130px;
 }
 .arrow-icon {
   width: 32px;

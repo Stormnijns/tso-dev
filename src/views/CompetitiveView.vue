@@ -12,6 +12,10 @@ import RankCard from '@/components/RankCard.vue'
         <RankCard rank="bronze"/>
         <RankCard rank="silver"/>
         <RankCard rank="gold"/>
+        <RankCard rank="platinum"/>
+        <RankCard rank="emerald"/>
+        <RankCard rank="diamond"/>
+        <RankCard rank="master"/>
       </div>
     </div>
   </main>
@@ -34,5 +38,6 @@ import RankCard from '@/components/RankCard.vue'
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin: 2rem;
 }
 </style>

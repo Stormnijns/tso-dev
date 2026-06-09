@@ -11,11 +11,27 @@ const props = defineProps({
 const rankUrl = computed(() =>
   new URL(`../assets/ranks/${props.rank}.png`, import.meta.url).href
 )
+
+const rankColors: Record<string, string> = {
+  platinum: '#6affd1',
+  emerald: '#00ff00',
+  diamond: '#00ddff',
+  master: '#ff0066',
+}
+const glowStyle = computed(() => {
+  const color = rankColors[props.rank]
+
+  if (!color) return {}
+
+  return {
+    filter: `drop-shadow(0 0 3px ${color})`,
+  }
+})
 </script>
 
 <template>
   <div class="rankCard">
-    <img :src="rankUrl" alt="" />
+    <img :src="rankUrl" alt="" :style="glowStyle" />
     <h1>{{ rank.toUpperCase() }}</h1>
   </div>
 </template>
