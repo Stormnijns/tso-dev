@@ -16,9 +16,10 @@ async function getLeaderboard() {
 
     const json = await res.json()
 
-    leaderboard.value = json.leaderboard || []
+    leaderboard.value = Array.isArray(json.leaderboard) ? json.leaderboard : []
   } catch (err: any) {
     error.value = err.message
+    leaderboard.value = []
   } finally {
     loading.value = false
   }
@@ -42,9 +43,9 @@ onMounted(() => {
           :key="player.userId"
           :rank="index + 1"
           :user-id="player.userId"
-          :name="player.username"
-          :value="player.kills"
-          :avatar="player.avatar"
+          :name="player.username ?? 'Unknown'"
+          :value="player.kills ?? 0"
+          :avatar="player.avatar ?? ''"
         />
       </div>
     </div>
